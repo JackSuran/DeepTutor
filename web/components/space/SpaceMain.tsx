@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { FeaturePage } from "@/components/layout/FeaturePage";
+import { workspaceRoute } from "@/lib/workspace-scope";
 
 // Hub-and-spoke: the dashboard at `/space` is the only navigator. Once inside a
 // section we don't re-list every sibling on a rail — a single "back to the hub"
@@ -14,7 +15,7 @@ function BackToHub() {
   const { t } = useTranslation();
   return (
     <Link
-      href="/space"
+      href={workspaceRoute("/space")}
       className="group inline-flex items-center gap-1.5 text-[13px] text-[var(--muted-foreground)] transition-colors hover:text-[var(--foreground)]"
     >
       <ArrowLeft

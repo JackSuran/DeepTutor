@@ -23,6 +23,20 @@ export function scopedUrl(path: string, workspaceId = activeWorkspaceId()): stri
   return absolute ? url.toString() : `${url.pathname}${url.search}${url.hash}`
 }
 
+/**
+ * Keep a page navigation inside the workspace the task is already using.
+ *
+ * Account-level surfaces (Learning Space, Notebooks) read their workspace from
+ * the URL, so a bare link would silently land on the default workspace and
+ * show a different notebook library than the conversation the learner came
+ * from. When no workspace is active the path is left untouched rather than
+ * gaining an empty `dt_workspace=`.
+ */
+export function workspaceRoute(path: string): string {
+  const workspaceId = activeWorkspaceId()
+  return workspaceId ? scopedUrl(path, workspaceId) : path
+}
+
 let navigate: ((path: string) => void) | undefined
 let navigationVersion = 0
 

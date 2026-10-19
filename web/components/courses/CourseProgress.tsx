@@ -12,6 +12,7 @@ import {
 import { useTranslation } from "react-i18next";
 
 import type { CourseState } from "@/lib/courses-api";
+import { workspaceRoute } from "@/lib/workspace-scope";
 
 /**
  * Where this course stands, as four entry points that carry their own numbers.
@@ -122,7 +123,7 @@ export default function CourseProgress({
         }
       />
       <Tile
-        href={`/notebooks?course=${course}`}
+        href={workspaceRoute(`/notebooks?course=${course}`)}
         icon={NotebookPen}
         label={t("Notebooks")}
         value={notebooks.length > 0 ? String(notebooks.length) : "—"}

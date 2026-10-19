@@ -28,6 +28,7 @@ import {
   type NotebookSummary,
 } from "@/lib/notebook-api";
 import { notebookRoute } from "@/lib/resource-routes";
+import { workspaceRoute } from "@/lib/workspace-scope";
 
 const SWATCHES = [
   "#6366F1",
@@ -92,7 +93,7 @@ export default function NotebookConsole({
   // visible resource without a click. Keep the address bar canonical too.
   useEffect(() => {
     if (!selectedId || selectedId === initialNotebookId) return;
-    router.replace(notebookRoute(selectedId, courseId));
+    router.replace(workspaceRoute(notebookRoute(selectedId, courseId)));
   }, [courseId, initialNotebookId, router, selectedId]);
 
   // How many notebooks exist *for this visit*. Everything the console counts —
@@ -159,7 +160,8 @@ export default function NotebookConsole({
         });
         onScopeChanged?.();
       }
-      if (createdId) router.push(notebookRoute(createdId, courseId));
+      if (createdId)
+        router.push(workspaceRoute(notebookRoute(createdId, courseId)));
       setNewName("");
       setNewDescription("");
       setCreating(false);
@@ -203,7 +205,7 @@ export default function NotebookConsole({
     setDeleting(true);
     try {
       await library.remove(selected.id);
-      router.replace(notebookRoute(null, courseId));
+      router.replace(workspaceRoute(notebookRoute(null, courseId)));
       notify(t('Deleted "{{name}}"', { name }), { tone: "success" });
       setConfirmingDelete(false);
       setEditingNotebookId(null);
@@ -254,7 +256,7 @@ export default function NotebookConsole({
       <aside className="flex w-[250px] shrink-0 flex-col border-r border-[var(--border)]">
         <div className="flex flex-col gap-2.5 px-3 pb-2.5 pt-3">
           <Link
-            href="/space"
+            href={workspaceRoute("/space")}
             className="group inline-flex w-fit items-center gap-1.5 text-[12px] text-[var(--muted-foreground)] transition-colors hover:text-[var(--foreground)]"
           >
             <ArrowLeft
@@ -333,13 +335,13 @@ export default function NotebookConsole({
             <div className="flex items-center gap-1.5 rounded-md border border-[var(--border)] bg-[var(--card)] py-1 pl-2 pr-1 text-[11px] text-[var(--muted-foreground)]">
               <School size={11} strokeWidth={1.8} className="shrink-0" />
               <Link
-                href={`/courses/${courseScope.id}`}
+                href={workspaceRoute(`/courses/${courseScope.id}`)}
                 className="min-w-0 flex-1 truncate transition-colors hover:text-[var(--foreground)]"
               >
                 {courseScope.name || t("This course")}
               </Link>
               <Link
-                href="/notebooks"
+                href={workspaceRoute("/notebooks")}
                 aria-label={t("Show every notebook")}
                 className="shrink-0 rounded p-0.5 transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)]"
               >
@@ -461,7 +463,7 @@ export default function NotebookConsole({
                   type="button"
                   onClick={() => {
                     library.select(notebook.id);
-                    router.push(notebookRoute(notebook.id, courseId));
+                    router.push(workspaceRoute(notebookRoute(notebook.id, courseId)));
                   }}
                   aria-current={active ? "true" : undefined}
                   className="flex min-w-0 flex-1 items-start gap-2 text-left focus-visible:outline-none"

@@ -1,4 +1,4 @@
-import { scopedUrl } from "@/lib/workspace-scope";
+import { scopedUrl, workspaceRoute } from "@/lib/workspace-scope";
 
 import { masterySessionsRoute, readingCollectionRoute, MASTERY_HOME, READING_HOME } from "@/lib/learning-routes";
 import type { StreamEvent } from "@/features/chat/model/protocol";
@@ -188,7 +188,7 @@ export function courseHandoffHref(payload: CourseHandoffPayload): string {
     case "question_bank":
       return `/learning/practice?course=${course}`;
     case "notebook":
-      return `/notebooks?course=${course}`;
+      return workspaceRoute(`/notebooks?course=${course}`);
     case "chat":
       return `/chat?course=${course}`;
   }

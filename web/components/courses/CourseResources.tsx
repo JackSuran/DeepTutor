@@ -24,6 +24,7 @@ import {
   type CourseResourceKind,
   type CourseResourceState,
 } from "@/lib/courses-api";
+import { workspaceRoute } from "@/lib/workspace-scope";
 
 /**
  * What this course studies with.
@@ -300,7 +301,7 @@ export default function CourseResources({
                     return (
                       <Link
                         key={route.kind}
-                        href={route.href(courseId)}
+                        href={workspaceRoute(route.href(courseId))}
                         className="inline-flex max-w-[220px] items-center gap-1.5 rounded-lg border border-dashed border-[var(--border)] px-2 py-1 text-[11.5px] text-[var(--muted-foreground)] transition-colors hover:border-[var(--ring)] hover:text-[var(--foreground)]"
                       >
                         <Icon

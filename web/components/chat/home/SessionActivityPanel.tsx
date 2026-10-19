@@ -33,6 +33,7 @@ import { listSessions, type SessionSummary } from "@/lib/session-api";
 import { listNotebooks, type NotebookSummary } from "@/lib/notebook-api";
 import { bookApi } from "@/lib/book-api";
 import type { Book } from "@/lib/book-types";
+import { workspaceRoute } from "@/lib/workspace-scope";
 import Tooltip from "@/shared/ui/Tooltip";
 
 import {
@@ -466,7 +467,7 @@ function SpaceSubsection({
   return (
     <div>
       <Link
-        href={category.href}
+        href={workspaceRoute(category.href)}
         className={`group flex min-h-8 items-center gap-2 rounded-lg px-2.5 py-1 transition-colors ${ACTIVITY_ROW_HOVER} focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--ring)]`}
       >
         <Icon

@@ -28,7 +28,7 @@ import { listNotebooks, listNotebookEntries } from "@/lib/notebook-api";
 import { listPersonas } from "@/lib/personas-api";
 import { listKnowledgeBases } from "@/features/knowledge/api/catalog";
 import { listSkills } from "@/lib/skills-api";
-import { scopedUrl } from "@/lib/workspace-scope";
+import { workspaceRoute } from "@/lib/workspace-scope";
 
 /**
  * Learning Space dashboard — the hub of `/space`.
@@ -364,7 +364,7 @@ function DashboardCard({
 
   return (
     <Link
-      href={item.key === "journal" ? scopedUrl(item.href) : item.href}
+      href={workspaceRoute(item.href)}
       className="group relative flex flex-col rounded-xl border border-[var(--border)] bg-[var(--card)] p-4 transition-all duration-150 hover:-translate-y-0.5 hover:border-[var(--foreground)]/20 hover:shadow-[0_6px_20px_-12px_rgba(0,0,0,0.25)]"
     >
       <div className="flex items-start gap-3">

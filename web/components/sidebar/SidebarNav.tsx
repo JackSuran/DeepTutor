@@ -57,6 +57,7 @@ import {
   writeNavLayout,
   type SidebarNavLayout,
 } from "@/lib/sidebar-layout";
+import { workspaceRoute } from "@/lib/workspace-scope";
 
 const MODULE_NAV_HREFS = PRIMARY_NAV_HREFS.filter((href) => href !== "/chat");
 
@@ -200,6 +201,14 @@ export function SidebarNav({
     return requires ? !has(requires) : false;
   };
 
+  /**
+   * Learning Space is account-level, but the notebooks it opens are scoped to a
+   * workspace. Carry the current one so the library matches the conversation
+   * the learner came from instead of silently falling back to the default.
+   */
+  const navHref = (href: string) =>
+    href === "/space" ? workspaceRoute(href) : href;
+
   /* ---- Icon-only rail ----
    * No arranging here: the rail is 60px of icons with no room for a menu or a
    * drop target. It honours the order and the folding, and reaches the folded
@@ -211,6 +220,7 @@ export function SidebarNav({
           <RailRow
             key={href}
             href={href}
+            linkHref={navHref(href)}
             active={isNavActive(pathname, href)}
             locked={isLocked(href)}
             lockedTooltip={lockedTooltip}
@@ -274,7 +284,7 @@ export function SidebarNav({
                   ) : (
                     <Link
                       key={href}
-                      href={href}
+                      href={navHref(href)}
                       prefetch={false}
                       onClick={(event) => {
                         closeMenus();
@@ -369,7 +379,7 @@ export function SidebarNav({
         ) : (
           <Link
             key={`${href}-destination`}
-            href={href}
+            href={navHref(href)}
             prefetch={false}
             draggable={false}
             onClick={href === "/chat" ? onHomeClick : onNavigate}
@@ -553,6 +563,7 @@ export function SidebarHome({
       <div className="mt-1 flex shrink-0 justify-center">
         <RailRow
           href="/chat"
+          linkHref="/chat"
           active={active}
           locked={locked}
           lockedTooltip={lockedTooltip}
@@ -607,12 +618,15 @@ export function SidebarHome({
 
 function RailRow({
   href,
+  linkHref,
   active,
   locked,
   lockedTooltip,
   onHomeClick,
 }: {
   href: string;
+  /** Destination with the current workspace attached; ``href`` stays canonical. */
+  linkHref: string;
   active: boolean;
   locked: boolean;
   lockedTooltip: string;
@@ -651,7 +665,7 @@ function RailRow({
   return (
     <Tooltip label={label} description={description} side="right">
       <Link
-        href={href}
+        href={linkHref}
         prefetch={false}
         onClick={href === "/chat" ? onHomeClick : undefined}
         aria-label={label}
