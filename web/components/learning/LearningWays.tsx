@@ -12,6 +12,7 @@ import { ArrowUpRight, ArrowRight, Check, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 type LearningKind = LearningSurface['kind']
 import { LEARNING_SURFACES, type LearningSurface } from './surfaces'
+import { workspaceRoute } from '@/lib/workspace-scope'
 
 const FOCUSABLE = 'a[href], input:not([disabled]), select:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])'
 const tileClass = (accent: string) =>
@@ -304,7 +305,7 @@ function WayPanel({
             {t('Go back')}
           </button>
           <Link
-            href={surface.href}
+            href={workspaceRoute(surface.href)}
             className="group flex items-center gap-3 rounded-xl bg-primary px-5 py-2.5 text-[13px] font-medium text-primary-foreground shadow-sm transition hover:brightness-110 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring motion-reduce:transform-none"
           >
             {t('Start')}

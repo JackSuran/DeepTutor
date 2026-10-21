@@ -43,6 +43,7 @@ import {
   DEFAULT_COLLAPSED_NAV,
   PRIMARY_NAV_HREFS,
   isNavActive,
+  navDestination,
   navVisibleUnderPolicy,
 } from "@/components/sidebar/nav-entries";
 import { useAuthStatus } from "@/hooks/useAuthStatus";
@@ -57,7 +58,6 @@ import {
   writeNavLayout,
   type SidebarNavLayout,
 } from "@/lib/sidebar-layout";
-import { workspaceRoute } from "@/lib/workspace-scope";
 
 const MODULE_NAV_HREFS = PRIMARY_NAV_HREFS.filter((href) => href !== "/chat");
 
@@ -202,12 +202,13 @@ export function SidebarNav({
   };
 
   /**
-   * Learning Space is account-level, but the notebooks it opens are scoped to a
-   * workspace. Carry the current one so the library matches the conversation
-   * the learner came from instead of silently falling back to the default.
+   * A module that reads workspace-owned data keeps the workspace it was
+   * opened from. Learning Space was the first such destination, but Co-Writer
+   * and Personalized Learning write the same scoped stores — a Co-Writer save
+   * lands in that workspace's notebook library — so a bare link silently
+   * moved the learner to the default workspace.
    */
-  const navHref = (href: string) =>
-    href === "/space" ? workspaceRoute(href) : href;
+  const navHref = (href: string) => navDestination(href);
 
   /* ---- Icon-only rail ----
    * No arranging here: the rail is 60px of icons with no room for a menu or a

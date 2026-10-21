@@ -123,7 +123,7 @@ export default function CourseProgress({
         }
       />
       <Tile
-        href={workspaceRoute(`/notebooks?course=${course}`)}
+        href={`/notebooks?course=${course}`}
         icon={NotebookPen}
         label={t("Notebooks")}
         value={notebooks.length > 0 ? String(notebooks.length) : "—"}
@@ -152,7 +152,7 @@ function Tile({
 }) {
   return (
     <Link
-      href={href}
+      href={workspaceRoute(href)}
       className="group rounded-xl border border-[var(--border)] bg-[var(--card)] p-3.5 transition-all duration-150 hover:-translate-y-0.5 hover:border-[var(--foreground)]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
     >
       <div className="flex items-center gap-2 text-[var(--muted-foreground)]">

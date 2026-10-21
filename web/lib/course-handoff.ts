@@ -168,9 +168,21 @@ export function extractCourseHandoffs(
  * The course is carried into the query string so the destination can scope
  * itself — the question bank and notebook surfaces are global otherwise, and
  * arriving at an unfiltered list defeats the point of being sent there.
+ *
+ * Every branch also keeps the workspace the course belongs to. A course's
+ * conversations, practice queue and notebooks live in one content workspace;
+ * a bare destination route would read the default workspace instead and send
+ * the learner to the same empty page the hand-off was meant to replace.
  */
 export function courseHandoffHref(payload: CourseHandoffPayload): string {
   const course = encodeURIComponent(payload.course_id);
+  return workspaceRoute(handoffDestination(payload, course));
+}
+
+function handoffDestination(
+  payload: CourseHandoffPayload,
+  course: string,
+): string {
   switch (payload.target) {
     case "immersive_reading":
       // Every branch stays course-scoped: an existing workspace still opens a
@@ -188,7 +200,7 @@ export function courseHandoffHref(payload: CourseHandoffPayload): string {
     case "question_bank":
       return `/learning/practice?course=${course}`;
     case "notebook":
-      return workspaceRoute(`/notebooks?course=${course}`);
+      return `/notebooks?course=${course}`;
     case "chat":
       return `/chat?course=${course}`;
   }

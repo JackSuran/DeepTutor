@@ -237,7 +237,9 @@ export default function NotebookConsole({
 
   const openSession = useCallback(
     (sessionId: string) => {
-      router.push(`/chat/${encodeURIComponent(sessionId)}`);
+      // The record's conversation lives in the workspace this console is
+      // showing; a bare /chat link would reopen it in the default workspace.
+      router.push(workspaceRoute(`/chat/${encodeURIComponent(sessionId)}`));
     },
     [router],
   );

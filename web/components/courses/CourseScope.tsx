@@ -6,6 +6,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { School, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+import { workspaceRoute } from "@/lib/workspace-scope";
 import {
   attachCourseResource,
   listCourses,
@@ -123,7 +124,7 @@ export function CourseScopeChip({ scope }: { scope: CourseScope }) {
   return (
     <span className="inline-flex items-center gap-1 rounded-full border border-[var(--border)] bg-[var(--card)] py-0.5 pl-2 pr-1 text-[10.5px] font-medium text-[var(--muted-foreground)]">
       <Link
-        href={`/courses/${scope.id}`}
+        href={workspaceRoute(`/courses/${scope.id}`)}
         className="inline-flex items-center gap-1 transition-colors hover:text-[var(--foreground)]"
       >
         <School size={11} strokeWidth={1.8} />
@@ -131,7 +132,7 @@ export function CourseScopeChip({ scope }: { scope: CourseScope }) {
       </Link>
       <button
         type="button"
-        onClick={() => router.replace(pathname)}
+        onClick={() => router.replace(workspaceRoute(pathname))}
         aria-label={t("Show every course")}
         className="rounded-full p-0.5 transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)]"
       >

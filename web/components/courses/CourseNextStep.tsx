@@ -1,6 +1,7 @@
 "use client";
 
 import { masterySessionsRoute, readingCollectionRoute } from "@/lib/learning-routes";
+import { workspaceRoute } from "@/lib/workspace-scope";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -153,7 +154,7 @@ export default function CourseNextStep({
     if (!step.action || going) return;
     setGoing(true);
     setPendingPrompt(step.action.prompt, step.action.scope);
-    router.push(step.action.href);
+    router.push(workspaceRoute(step.action.href));
   };
 
   return (

@@ -13,6 +13,7 @@ import {
   type CoWriterDocumentSummary,
 } from "@/lib/co-writer-api";
 import { notifyCoWriterChanged } from "@/lib/co-writer-events";
+import { workspaceRoute } from "@/lib/workspace-scope";
 import { CO_WRITER_SAMPLE_TEMPLATE } from "./sampleTemplate";
 import Tooltip from "@/shared/ui/Tooltip";
 
@@ -71,7 +72,7 @@ export default function CoWriterHomePage() {
           content: withTemplate ? CO_WRITER_SAMPLE_TEMPLATE : "",
         });
         notifyCoWriterChanged();
-        router.push(`/co-writer/${document.id}`);
+        router.push(workspaceRoute(`/co-writer/${document.id}`));
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
         setCreating(false);
@@ -88,7 +89,7 @@ export default function CoWriterHomePage() {
       try {
         const document = await importCoWriterDocx(file);
         notifyCoWriterChanged();
-        router.push(`/co-writer/${document.id}`);
+        router.push(workspaceRoute(`/co-writer/${document.id}`));
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
         setImporting(false);
@@ -249,11 +250,11 @@ export default function CoWriterHomePage() {
                   key={doc.id}
                   role="button"
                   tabIndex={0}
-                  onClick={() => router.push(`/co-writer/${doc.id}`)}
+                  onClick={() => router.push(workspaceRoute(`/co-writer/${doc.id}`))}
                   onKeyDown={(event) => {
                     if (event.key === "Enter" || event.key === " ") {
                       event.preventDefault();
-                      router.push(`/co-writer/${doc.id}`);
+                      router.push(workspaceRoute(`/co-writer/${doc.id}`));
                     }
                   }}
                   className="group relative flex h-44 cursor-pointer flex-col rounded-2xl border border-[var(--border)] p-4 text-left transition-colors hover:border-[var(--ring)]"

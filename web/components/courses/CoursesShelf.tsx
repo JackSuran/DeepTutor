@@ -17,6 +17,7 @@ import CourseDialog from "@/components/courses/CourseDialog";
 import { createCourse, listCourses, type StudyCourse } from "@/lib/courses-api";
 import { formatRelativeTime } from "@/lib/relative-time";
 import { listAllSessions, type SessionSummary } from "@/lib/session-api";
+import { workspaceRoute } from "@/lib/workspace-scope";
 
 /**
  * The course library — every subject the learner is carrying.
@@ -153,7 +154,7 @@ export default function CoursesShelf() {
           {active.map((course) => (
             <Link
               key={course.id}
-              href={`/courses/${course.id}`}
+              href={workspaceRoute(`/courses/${course.id}`)}
               className="group flex min-h-32 flex-col rounded-xl border border-[var(--border)] bg-[var(--card)] p-4 transition-all duration-150 hover:-translate-y-0.5 hover:border-[var(--foreground)]/20 hover:shadow-[0_6px_20px_-12px_rgba(0,0,0,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
             >
               <div className="flex items-start justify-between gap-3">
@@ -247,7 +248,7 @@ export default function CoursesShelf() {
             {archived.map((course) => (
               <li key={course.id}>
                 <Link
-                  href={`/courses/${course.id}`}
+                  href={workspaceRoute(`/courses/${course.id}`)}
                   className="flex items-baseline gap-2 rounded-lg px-2.5 py-1.5 transition-colors hover:bg-[var(--muted)]/40"
                 >
                   <span

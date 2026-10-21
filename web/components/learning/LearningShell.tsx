@@ -5,6 +5,7 @@ import { ArrowLeft, AlertCircle, RefreshCw } from 'lucide-react'
 import type { ReactNode, Ref, UIEventHandler } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LEARNING_HUB } from '@/lib/learning-routes'
+import { workspaceRoute } from '@/lib/workspace-scope'
 import { FeaturePage, PageHeader } from '@/components/layout/FeaturePage'
 
 /** The same page rhythm for the hub and each library; readers keep their full-screen layouts. */
@@ -40,7 +41,7 @@ export function LearningShell({
     >
       {back && (
         <Link
-          href={LEARNING_HUB}
+          href={workspaceRoute(LEARNING_HUB)}
           className="mb-5 inline-flex items-center gap-1.5 text-xs text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
         >
           <ArrowLeft size={14} />

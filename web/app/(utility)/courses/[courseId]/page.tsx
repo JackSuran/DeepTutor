@@ -44,6 +44,7 @@ import {
   type SessionOrganizationPatch,
   type SessionSummary,
 } from "@/lib/session-api";
+import { workspaceRoute } from "@/lib/workspace-scope";
 
 export default function CourseDetailPage() {
   const { t } = useTranslation();
@@ -184,7 +185,7 @@ export default function CourseDetailPage() {
     setDeleteError(null);
     try {
       await deleteCourse(course.id);
-      router.push("/courses");
+      router.push(workspaceRoute("/courses"));
     } catch (error) {
       setDeleteError(
         error instanceof Error && error.message
@@ -213,7 +214,7 @@ export default function CourseDetailPage() {
           {t("Course not found")}
         </h1>
         <Link
-          href="/courses"
+          href={workspaceRoute("/courses")}
           className="mt-3 inline-block text-sm text-[var(--primary)]"
         >
           {t("Back to Courses")}
@@ -230,7 +231,7 @@ export default function CourseDetailPage() {
     <div>
       <div className="mb-5">
         <Link
-          href="/courses"
+          href={workspaceRoute("/courses")}
           className="group inline-flex items-center gap-1.5 text-[13px] text-[var(--muted-foreground)] transition-colors hover:text-[var(--foreground)]"
         >
           <ArrowLeft
@@ -248,7 +249,9 @@ export default function CourseDetailPage() {
         action={
           <div className="relative flex shrink-0 items-center gap-2">
             <Link
-              href={`/chat?course=${encodeURIComponent(course.id)}&capability=course_study`}
+              href={workspaceRoute(
+                `/chat?course=${encodeURIComponent(course.id)}&capability=course_study`,
+              )}
               className={pageActionClass()}
             >
               <Signpost size={14} />
@@ -270,11 +273,13 @@ export default function CourseDetailPage() {
                   // Carries the course's declared starting mode, so "a new chat
                   // in this course" opens the way this course is studied rather
                   // than in whatever mode the composer was last left in.
-                  href={`/chat?course=${encodeURIComponent(course.id)}${
-                    course.default_capability
-                      ? `&capability=${encodeURIComponent(course.default_capability)}`
-                      : ""
-                  }`}
+                  href={workspaceRoute(
+                    `/chat?course=${encodeURIComponent(course.id)}${
+                      course.default_capability
+                        ? `&capability=${encodeURIComponent(course.default_capability)}`
+                        : ""
+                    }`,
+                  )}
                   onClick={() => setMenuOpen(false)}
                   className="flex w-full items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-[var(--muted)]"
                 >
@@ -371,7 +376,7 @@ export default function CourseDetailPage() {
           courses={courses}
           activeSessionId={null}
           emptyLabel={t("No conversations in this course")}
-          onSelect={(sessionId) => router.push(`/chat/${sessionId}`)}
+          onSelect={(sessionId) => router.push(workspaceRoute(`/chat/${sessionId}`))}
           onRename={renameSession}
           onDelete={removeSession}
           onOrganize={patchSession}
@@ -391,7 +396,7 @@ export default function CourseDetailPage() {
             sessions={archivedSessions}
             courses={courses}
             activeSessionId={null}
-            onSelect={(sessionId) => router.push(`/chat/${sessionId}`)}
+            onSelect={(sessionId) => router.push(workspaceRoute(`/chat/${sessionId}`))}
             onRename={renameSession}
             onDelete={removeSession}
             onOrganize={patchSession}

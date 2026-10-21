@@ -1,4 +1,5 @@
 import { LEARNING_HUB } from '@/lib/learning-routes'
+import { activeWorkspaceId, scopedUrl } from '@/lib/workspace-scope'
 import {
   Bot,
   GraduationCap,
@@ -21,6 +22,16 @@ export interface NavEntry {
   defaultCollapsed?: boolean
   /** Model capability this feature needs; locked when the user lacks it. */
   requires?: Capability
+  /**
+   * The page reads and writes content owned by the selected workspace.
+   *
+   * A link into such a page carries the active `dt_workspace`; without it the
+   * destination silently falls back to the default workspace and shows an
+   * empty library — the bug that made notebooks saved in Co-Writer invisible
+   * on the Learning Space page. Account-level entries (Partners, Settings)
+   * stay unscoped.
+   */
+  workspaceScoped?: boolean
   /**
    * Learning-account surfaces that may see this entry. Absent means the
    * entry is hidden whenever a learning policy is in effect (#1222).
@@ -59,8 +70,15 @@ export const PRIMARY_NAV: NavEntry[] = [
     icon: GraduationCap,
     tooltipKey: 'One tutor, your own way to learn.',
     surfaces: ['reading', 'chat', 'books'],
+    workspaceScoped: true,
   },
-  { href: '/space', label: 'Learning Space', icon: LayoutGrid, tooltipKey: 'Space tooltip' },
+  {
+    href: '/space',
+    label: 'Learning Space',
+    icon: LayoutGrid,
+    tooltipKey: 'Space tooltip',
+    workspaceScoped: true,
+  },
   {
     href: '/kanban',
     label: 'Task Board',
@@ -75,6 +93,7 @@ export const PRIMARY_NAV: NavEntry[] = [
     tooltipKey: 'Co-Writer tooltip',
     requires: 'llm',
     defaultCollapsed: true,
+    workspaceScoped: true,
   },
   {
     href: '/agents',
@@ -99,6 +118,24 @@ export const NAV_BY_HREF = new Map(
 
 export function isNavActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`)
+}
+
+/**
+ * Where a module entry points, keeping the workspace the learner is already in.
+ *
+ * Only entries that own workspace-scoped data are rewritten: Partners and
+ * Settings are account-level, and Task Board declares its own unscoped route
+ * (``scopedUrl`` strips the parameter there). Cards into Co-Writer and
+ * Personalized Learning must carry it, or a notebook saved from those pages
+ * lands in the default workspace and disappears from the workspace it was
+ * written in.
+ */
+export function navDestination(
+  href: string,
+  workspaceId = activeWorkspaceId(),
+): string {
+  if (!workspaceId || !NAV_BY_HREF.get(href)?.workspaceScoped) return href
+  return scopedUrl(href, workspaceId)
 }
 
 /**
